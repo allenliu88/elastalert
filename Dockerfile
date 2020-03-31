@@ -1,4 +1,4 @@
-FROM alpine:latest as py-ea
+FROM alpine:3.10 as py-ea
 ARG ELASTALERT_VERSION=v0.2.0b2
 ENV ELASTALERT_VERSION=${ELASTALERT_VERSION}
 # URL from which to download Elastalert.
@@ -20,15 +20,24 @@ WORKDIR "${ELASTALERT_HOME}"
 
 # Install Elastalert.
 # see: https://github.com/Yelp/elastalert/issues/1654
-RUN sed -i 's/jira>=1.0.10/jira>=1.0.10,<1.0.15/g' setup.py && \
-    python setup.py install && \
-    pip install -r requirements.txt
+RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories && \
+    sed -i 's/elasticsearch/elasticsearch==6.8.0/g' setup.py && \
+    sed -i 's/elasticsearch/elasticsearch==6.8.0/g' requirements.txt
 
-FROM node:alpine
+RUN mkdir ~/.pip
+COPY ./config/pip.conf ~/.pip/
+COPY ./config/.pydistutils.cfg ~/
+
+
+RUN pip install -r requirements.txt && \
+    python setup.py install
+
+FROM node:alpine3.10
 LABEL maintainer="BitSensor <dev@bitsensor.io>"
 # Set timezone for this container
 ENV TZ Etc/UTC
 
+RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
 RUN apk add --update --no-cache curl tzdata python2 make libmagic
 
 COPY --from=py-ea /usr/lib/python2.7/site-packages /usr/lib/python2.7/site-packages

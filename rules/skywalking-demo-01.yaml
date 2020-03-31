@@ -1,0 +1,35 @@
+# 存在name=db.hzero.org:3306则报警
+# (Optional)
+# Elasticsearch host
+es_host: 172.23.16.40
+
+# (Optional)
+# Elasticsearch port
+es_port: 9200
+
+# (OptionaL) Connect with SSL to Elasticsearch
+#use_ssl: True
+
+# (Optional) basic-auth username and password for Elasticsearch
+#es_username: someusername
+#es_password: somepassword
+name: skywalking-demo-01
+type: blacklist
+index: service_instance_inventory
+
+timeframe:
+  hours: 24
+
+compare_key: name
+
+blacklist:
+    - "db.hzero.org:3306"
+
+smtp_host: smtphm.qiye.163.com
+smtp_port: 465
+smtp_auth_file: smtp.yaml
+alert:
+- "email"
+
+email:
+- "812050653@qq.com"
