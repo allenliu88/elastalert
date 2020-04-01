@@ -17,6 +17,9 @@ name: skywalking-demo-01
 type: blacklist
 index: service_instance_inventory
 
+timestamp_field: last_update_time
+timestamp_type: unix_ms
+
 timeframe:
   hours: 24
 
@@ -25,11 +28,17 @@ compare_key: name
 blacklist:
     - "db.hzero.org:3306"
 
-smtp_host: smtphm.qiye.163.com
-smtp_port: 465
-smtp_auth_file: smtp.yaml
+from_addr: xxx@qq.com
+smtp_host: smtp.qq.com
+smtp_port: 25
+smtp_auth_file: /opt/config/smtp.yaml
 alert:
 - "email"
 
 email:
-- "812050653@qq.com"
+- "xxx@163.com"
+
+alert_subject: "Issue {0} occurred at {1}"
+alert_subject_args:
+- issue.name
+- "last_update_time"

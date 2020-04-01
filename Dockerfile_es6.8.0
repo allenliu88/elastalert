@@ -21,8 +21,8 @@ WORKDIR "${ELASTALERT_HOME}"
 # Install Elastalert.
 # see: https://github.com/Yelp/elastalert/issues/1654
 RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories && \
-    sed -i 's/elasticsearch/elasticsearch==7.5.1/g' setup.py && \
-    sed -i 's/elasticsearch/elasticsearch==7.5.1/g' requirements.txt
+    sed -i 's/elasticsearch/elasticsearch==6.8.0/g' setup.py && \
+    sed -i 's/elasticsearch/elasticsearch==6.8.0/g' requirements.txt
 
 RUN mkdir ~/.pip
 COPY ./config/pip.conf ~/.pip/
